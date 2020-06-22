@@ -7,11 +7,11 @@ void main() {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         
-        drawer: Drawer(
+        /*drawer: Drawer(
           child: Center(
             child: Text('Hello Robin Schulz'),
           ),
-        ),
+        ),*/
         backgroundColor: Colors.blueGrey,
         appBar: AppBar(
           centerTitle: true,
@@ -21,11 +21,14 @@ void main() {
         ),
         body: Center(
           child: Image(
-            image: NetworkImage(
-                'https://pbs.twimg.com/profile_images/1270033438725283840/Ds0dTlQJ_400x400.jpg'),
+            image: AssetImage(
+                'images/diamond.png'),
           ),
         ),
       ),
     ),
   );
 }
+
+
+//icons8, vecteezy
