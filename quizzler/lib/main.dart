@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import './questions.dart';
-import './quiz_brain.dart';
-
-
+//TODO: Step 2 - Import the rFlutter_Alert package here.
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'quiz_brain.dart';
 
 QuizBrain quizBrain = QuizBrain();
-
 
 void main() => runApp(Quizzler());
 
@@ -32,29 +30,51 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-List <Widget>scoreKeeper = [];
-/*
-List <String> questions= [
-'You can lead a cow down stairs but not up stairs.',
-'Approximately one quarter of human bones are in the feet.',
-'A slug\'s blood is green.'
-];
+  List<Icon> scoreKeeper = [];
 
+  void checkAnswer(bool userPickedAnswer) {
+    bool correctAnswer = quizBrain.getCorrectAnswer();
 
-List<bool> ans =[
-false,
-true,
-true
-];
-List<Question> questionBook = [
-Question(q: 'You can lead a cow down stairs but not up stairs.', a: false),
-Question(q: 'Approximately one quarter of human bones are in the feet.', a: true),
-Question(q: 'A slug\'s blood is green.', a: true),
+    setState(() {
+      //TODO: Step 4 - Use IF/ELSE to check if we've reached the end of the quiz. If so,
+      //On the next line, you can also use if (quizBrain.isFinished()) {}, it does the same thing.
+      if (quizBrain.isFinished() == true) {
+        //TODO Step 4 Part A - show an alert using rFlutter_alert,
 
-];*/
+        //This is the code for the basic alert from the docs for rFlutter Alert:
+        //Alert(context: context, title: "RFLUTTER", desc: "Flutter is awesome.").show();
 
-//Question q1= Question(q: 'You can lead a cow down stairs but not up stairs.', a: false);
+        //Modified for our purposes:
+        Alert(
+          context: context,
+          title: 'Finished!',
+          desc: 'You\'ve reached the end of the quiz.',
+        ).show();
 
+        //TODO Step 4 Part C - reset the questionNumber,
+        quizBrain.reset();
+
+        //TODO Step 4 Part D - empty out the scoreKeeper.
+        scoreKeeper = [];
+      }
+
+      //TODO: Step 6 - If we've not reached the end, ELSE do the answer checking steps below 👇
+      else {
+        if (userPickedAnswer == correctAnswer) {
+          scoreKeeper.add(Icon(
+            Icons.check,
+            color: Colors.green,
+          ));
+        } else {
+          scoreKeeper.add(Icon(
+            Icons.close,
+            color: Colors.red,
+          ));
+        }
+        quizBrain.nextQuestion();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,17 +112,8 @@ Question(q: 'A slug\'s blood is green.', a: true),
                 ),
               ),
               onPressed: () {
-              bool corrAns= quizBrain.getAnswer();
-              if (corrAns == true){
-                print('user got it right!');
-              }  else {
-                print('user got it wrong');
-              }
-                
-                setState(() {
-                 quizBrain.nextQues();
-                });
                 //The user picked true.
+                checkAnswer(true);
               },
             ),
           ),
@@ -120,24 +131,15 @@ Question(q: 'A slug\'s blood is green.', a: true),
                 ),
               ),
               onPressed: () {
-
-                bool corrAns= quizBrain.getAnswer();
-              if (corrAns == false){
-                print('user got it right!');
-              }  else {
-                print('user got it wrong');
-              }
-                
-                setState(() {
-                  quizBrain.nextQues();
-                });
-                 //scoreKeeper.add(Icon(Icons.close),);
                 //The user picked false.
+                checkAnswer(false);
               },
             ),
           ),
         ),
-       Row(children: scoreKeeper,)
+        Row(
+          children: scoreKeeper,
+        )
       ],
     );
   }
